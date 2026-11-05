@@ -22,3 +22,15 @@ Interactive prototype (frontend only). All on-chain parts are **simulated** with
 
 ## Run
 Open `index.html` in a browser.
+
+## Contract (`contracts/`)
+`LaterCapsule.sol` — ownerless, non-upgradeable, nothing can be deleted.
+- `seal(recipient, unlockAt, drandRound, onSky, ciphertext)`: the message is encrypted off-chain with drand timelock to `drandRound`; the ciphertext is emitted in the `Sealed` event and only its hash is stored.
+- `open(id)`: records the opening moment after `unlockAt` (sender/recipient; link capsules: anyone).
+- Lock window: 10 minutes to 100 years. Ciphertext up to 8 KB (media goes off-chain via a URI inside the ciphertext).
+
+```bash
+cd contracts
+forge install foundry-rs/forge-std --no-git
+forge test
+```
