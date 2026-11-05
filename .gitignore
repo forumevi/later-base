@@ -1,3 +1,5 @@
 contracts/lib/
 contracts/out/
 contracts/cache/
+tlock-src/node_modules/
+tlock-src/t.mjs

@@ -72,7 +72,8 @@
       .x-note small { font: var(--type-caption); color: var(--x-gold); }
       .x-trust { font: var(--type-small); color: var(--x-dim); margin: 18px 0 0; }
       .x-card { position: relative; max-width: 640px; margin: 0 auto; padding: 24px; border-radius: var(--r-l); border: 1px solid var(--x-line); background-color: #140f30; background-image: linear-gradient(160deg, rgb(165 139 255 / .12), rgb(245 197 107 / .06)); box-shadow: 0 0 60px rgb(165 139 255 / .12); transition: transform .7s var(--ease-out), opacity .7s var(--ease-out), border-radius .7s var(--ease-out), filter .7s; }
-      .x-card.is-shrinking { transform: scale(.12, .3); border-radius: var(--r-pill); opacity: 0; filter: brightness(2) blur(2px); }
+      .x-card { clip-path: inset(-100px round var(--r-l)); }
+      .x-card.is-shrinking { clip-path: inset(35% 44% round 999px); opacity: 0; filter: brightness(2) blur(2px); visibility: hidden; pointer-events: none; transition: clip-path .7s var(--ease-out), opacity .7s var(--ease-out), filter .7s, visibility 0s .7s; }
       .x-card textarea { width: 100%; min-height: 160px; resize: vertical; box-sizing: border-box; padding: 16px; border-radius: var(--r-m); border: 1px solid var(--x-line); background: rgb(0 0 0 / .25); color: var(--x-ink); font: var(--type-body); font-size: 17px; line-height: 1.6; }
       .x-card textarea:focus { outline: 2px solid var(--x-gold); outline-offset: 2px; }
       .x-label { font: var(--type-caption); color: var(--x-dim); text-transform: uppercase; letter-spacing: .12em; margin: 20px 0 10px; }
@@ -136,10 +137,27 @@
       .x-tip.is-on { opacity: 1; }
       .x-counter { font: var(--type-body); color: var(--x-dim); margin: 16px 0 0; text-align: center; }
       .x-counter b { color: var(--x-gold); font-weight: var(--weight-medium); font-size: 20px; }
+      .x-real { margin: -12px 0 24px; }
+      .x-real[hidden], .x-out[hidden] { display: none; }
+      .x-real .fineprint { margin: 10px 0 0; }
+      .x-demo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin-top: 12px; }
+      .x-demo .x-hint { margin: 0; }
+      .x-card.x-open textarea { min-height: 120px; font-family: "Geist Mono", monospace; font-size: 13px; line-height: 1.5; }
+      .x-open .x-seal { margin-top: 16px; }
+      .x-open .x-seal:disabled { opacity: .7; cursor: progress; }
+      .x-out { margin-top: 20px; padding: 24px; border-radius: var(--r-l); border: 1px solid var(--x-line); background-color: #1a1438; text-align: center; }
+      .x-out h3 { font-family: var(--sans); font-weight: var(--weight-medium); font-size: clamp(24px, 4vw, 32px); line-height: 1.2; letter-spacing: -0.02em; margin: 0; color: #fff6e0; }
+      .x-out .x-hint { margin-top: 8px; }
+      .x-out.is-open { border-color: rgb(245 197 107 / .6); box-shadow: 0 0 60px rgb(245 197 107 / .35); animation: x-reveal 1.4s var(--ease-out) both; }
+      @keyframes x-reveal { 0% { opacity: 0; transform: scale(.94); box-shadow: 0 0 0 rgb(245 197 107 / 0); } 40% { opacity: 1; box-shadow: 0 0 120px rgb(245 197 107 / .75); } }
+      .x-out.is-open h3 { color: var(--x-gold); text-shadow: 0 0 24px rgb(245 197 107 / .6); margin-bottom: 12px; }
+      .x-msg { font: var(--type-body); font-size: 18px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--x-ink); margin: 0; }
+      .x-mini { width: 28px; height: 64px; margin: 0 auto 16px; border-radius: var(--r-pill); background: linear-gradient(180deg, #ffe3a3 0%, var(--x-gold) 48%, #3b2a6e 49%, var(--x-violet) 52%, #6b4fd8 100%); box-shadow: 0 0 24px rgb(245 197 107 / .5); animation: x-rattle .5s ease-in-out 3; }
+      @keyframes x-rattle { 20% { transform: rotate(-14deg); } 40% { transform: rotate(11deg); } 60% { transform: rotate(-8deg); } 80% { transform: rotate(5deg); } }
       .x-foot { text-align: center; font: var(--type-label); letter-spacing: .3em; color: var(--x-dim); padding: 40px 0 8px; margin: 0; }
       @media (min-width: 760px) { .x-card { padding: 36px; } .x-sky { height: 480px; } }
       @media (prefers-reduced-motion: reduce) {
-        .x-aurora, .x-fp, .x-sheet, .x-result, .x-shake, .x-today, .x-today i, .x-cta::after, .x-seal::after, .x-fl, .x-live b { animation: none !important; }
+        .x-aurora, .x-fp, .x-sheet, .x-result, .x-shake, .x-out, .x-mini, .x-today, .x-today i, .x-cta::after, .x-seal::after, .x-fl, .x-live b { animation: none !important; }
         .x-card, .x-cta, .x-seal, .x-opt, .x-rv { transition: none !important; }
         .x-rv { opacity: 1; transform: none; }
         .x-track { animation: none; flex-wrap: wrap; width: auto; padding: 0; }
@@ -207,6 +225,10 @@
             <p class="x-when" aria-live="polite">Unlocks on <b id="when-date">…</b> · in <b id="when-in">…</b></p>
             <label class="x-switch"><input type="checkbox" id="on-sky" checked /><span aria-hidden="true"></span>Show on the Capsule Sky</label>
             <button type="submit" class="x-seal">Seal it</button>
+            <div class="x-demo">
+              <button type="button" class="x-opt" id="demo">Try a 30-second capsule</button>
+              <p class="x-hint">Seals for real, then opens in front of you.</p>
+            </div>
           </form>
           <div class="x-stage" id="stage" hidden aria-hidden="true">
             <div class="x-flash"></div>
@@ -229,6 +251,10 @@
           <div class="x-result" id="result" hidden tabindex="-1" style="margin-top:32px">
             <h3 id="result-h"></h3>
             <p class="x-receipt" id="receipt">Capsule #48,213 · Sealed on Base · 0x7a3f…c91e</p>
+            <div class="x-real" id="real" hidden>
+              <button type="button" class="btn" id="copy">Copy capsule</button>
+              <p class="fineprint">Encryption is real (drand timelock). On-chain save: demo.</p>
+            </div>
             <div class="x-count" role="timer" aria-label="Time until your capsule unlocks">
               <div><b id="cd-d">0</b><span>days</span></div>
               <div><b id="cd-h">00</b><span>hours</span></div>
@@ -240,6 +266,19 @@
               <a class="x-cta" id="share" href="https://twitter.com/intent/tweet" target="_blank" rel="noopener">Share on X</a>
               <a class="btn" href="#compose" id="again">Write another</a>
             </div>
+          </div>
+        </section>
+
+        <section class="section" id="open" data-nav="Open">
+          <div class="head">
+            <h2>Open a capsule</h2>
+            <p class="head__sub">If its moment has come, it opens. If not, nothing on earth can open it yet.</p>
+          </div>
+          <div class="x-card x-open">
+            <label class="x-label" for="open-in" style="display:block;margin-top:0">Paste a capsule</label>
+            <textarea id="open-in" spellcheck="false" autocomplete="off" placeholder="-----BEGIN AGE ENCRYPTED FILE-----"></textarea>
+            <button type="button" class="x-seal" id="open-btn">Try to open</button>
+            <div class="x-out" id="open-out" aria-live="polite" hidden></div>
           </div>
         </section>
 
@@ -270,7 +309,7 @@
             </div>
             <div>
               <h3>Truly locked</h3>
-              <p>The key is released only on the unlock date.</p>
+              <p>Truly locked — sealed with drand timelock encryption. The key doesn't exist anywhere until the unlock moment, not even with us.</p>
             </div>
             <div>
               <h3>Forever</h3>
@@ -299,10 +338,12 @@
 
     <canvas class="x-fx" id="fx" aria-hidden="true"></canvas>
     <script src="hark.js"></script>
+    <script src="tlock.bundle.js"></script>
     <script>
       (function () {
         var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
         var DAY = 864e5, st = { to: "me", via: "link", when: "1m" }, vals = {}, unlock, timer, count = 48213;
+        var capMs = 0, capCt = "", capAuto = false, busy = false;
         var $ = function (id) { return document.getElementById(id); };
         var pad = function (n) { return String(n).padStart(2, "0"); };
         var fmt = function (d) { return d.toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" }); };
@@ -395,20 +436,42 @@
           }, 1500);
         });
 
-        function seal() {
-          var date = fmt(unlock), name = $("to-name").value.trim(), forSome = st.to === "someone", onSky = $("on-sky").checked;
+        function preview(ct) {
+          var lines = ct.split(/\r?\n/), i = lines.findIndex(function (l) { return l.indexOf("BEGIN") > -1; });
+          var line = (lines[i + 1] || lines[0] || "").trim();
+          return line.slice(0, 18) + "…";
+        }
+        function seal(ms) {
+          if (busy) return;
+          busy = true;
+          var demo = !!ms, until = ms || +unlock, date = fmt(new Date(until)), name = $("to-name").value.trim(), forSome = st.to === "someone" && !!name, onSky = $("on-sky").checked, secret = msg.value;
           var b = function (t) { var el = document.createElement("b"); el.textContent = t; return el; }, h = $("result-h");
           count++; setCount(true);
+          var capNo = count.toLocaleString("en-US");
+          capMs = until; capCt = ""; capAuto = false; $("real").hidden = true;
           h.textContent = "";
-          if (forSome) h.append("Sealed for ", b(name), ". Nobody can open it until ", b(date), ".");
+          if (demo) h.append("Sealed. Nobody can open this for ", b("30 seconds"), " — not even you.");
+          else if (forSome) h.append("Sealed for ", b(name), ". Nobody can open it until ", b(date), ".");
           else h.append("Sealed. Nobody can open this until ", b(date), " — not even you.");
-          $("receipt").textContent = "Capsule #" + count.toLocaleString("en-US") + " · Sealed on Base · 0x" + Math.random().toString(16).slice(2, 6) + "…" + Math.random().toString(16).slice(2, 6);
-          var text = forSome ? name + ", I left you a capsule. It opens on " + date + "." : "I just sealed a time capsule nobody can open until " + date + ". Not even me. ⏳";
+          $("receipt").textContent = "Capsule #" + capNo + " · Sealed on Base · 0x" + Math.random().toString(16).slice(2, 6) + "…" + Math.random().toString(16).slice(2, 6);
+          var text = demo ? "I just sealed a time capsule with real timelock encryption. Nobody could open it for 30 seconds. ⏳" : forSome ? name + ", I left you a capsule. It opens on " + date + "." : "I just sealed a time capsule nobody can open until " + date + ". Not even me. ⏳";
+          var sealP = new Promise(function (res, rej) {
+            if (!window.LaterTlock) return rej();
+            setTimeout(rej, 20000);
+            res(LaterTlock.seal(secret, until));
+          }).catch(function () { return null; });
           $("share-text").hidden = !forSome;
           $("share-text").textContent = forSome ? (st.via === "link" ? "Send it with your private link: " : "Delivered to " + viaIn.value.trim() + " on unlock day. Share: ") + "“" + text + "”" : "";
           $("share").href = "https://twitter.com/intent/tweet?text=" + encodeURIComponent(text);
-          var stage = $("stage"), result = $("result"), label = human(unlock - Date.now());
-          function done() {
+          var stage = $("stage"), result = $("result"), label = human(until - Date.now());
+          function done(r) {
+            busy = false;
+            if (r && r.ciphertext) {
+              capCt = r.ciphertext;
+              if (r.unlockMs > capMs) capMs = r.unlockMs;
+              $("receipt").textContent = "Sealed on Base · Capsule #" + capNo + " · drand round #" + r.round + " · " + preview(r.ciphertext);
+              $("copy").textContent = "Copy capsule"; $("real").hidden = false;
+            }
             stage.hidden = true; document.body.style.overflow = "";
             card.classList.remove("is-shrinking"); msg.value = "";
             photo.value = ""; photo.dispatchEvent(new Event("change"));
@@ -419,9 +482,82 @@
             if (onSky) sky.addUser(label, forSome ? name : "");
             result.focus({ preventScroll: true });
           }
-          if (reduce) { done(); return; }
-          card.classList.add("is-shrinking"); stage.hidden = false; document.body.style.overflow = "hidden";
-          setTimeout(done, 3450);
+          var anim = new Promise(function (res) {
+            if (reduce) return res();
+            card.classList.add("is-shrinking"); stage.hidden = false; document.body.style.overflow = "hidden";
+            setTimeout(res, 3450);
+          });
+          Promise.all([sealP, anim]).then(function (v) { done(v[0]); });
+        }
+
+        $("demo").addEventListener("click", function () {
+          if (busy) return;
+          if (!msg.value.trim()) msg.value = "Hello from 30 seconds ago. This was locked with real timelock encryption, and now it's yours.";
+          if (vInt) voice.click();
+          seal(Date.now() + 30000);
+        });
+
+        $("copy").addEventListener("click", function () {
+          var btn = this;
+          function ok() { btn.textContent = "Copied"; setTimeout(function () { btn.textContent = "Copy capsule"; }, 2000); }
+          function fallback() {
+            var ta = document.createElement("textarea");
+            ta.value = capCt; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand("copy"); ok(); } catch (e) {}
+            document.body.removeChild(ta);
+          }
+          if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(capCt).then(ok, fallback);
+          else fallback();
+        });
+
+        var openIn = $("open-in"), openBtn = $("open-btn"), openOut = $("open-out");
+        function showOpen(kind, val) {
+          openBtn.disabled = false; openBtn.textContent = "Try to open";
+          openOut.hidden = false; openOut.className = "x-out"; void openOut.offsetWidth; openOut.textContent = "";
+          var h = document.createElement("h3"), p = document.createElement("p");
+          if (kind === "open") {
+            openOut.classList.add("is-open"); h.textContent = "It's open."; p.className = "x-msg"; p.textContent = val;
+            openOut.append(h, p);
+            var r = openOut.getBoundingClientRect();
+            if (!reduce) for (var k = 0; k < 5; k++) (function (k) { setTimeout(function () { burst(r.left + r.width * (0.15 + Math.random() * 0.7), r.top + r.height * (0.2 + Math.random() * 0.6), 30, true); }, k * 140); })(k);
+          } else if (kind === "locked") {
+            var mini = document.createElement("div"); mini.className = "x-mini"; mini.setAttribute("aria-hidden", "true");
+            var eta = "";
+            try { var d = (val - LaterTlock.roundFor(Date.now())) * LaterTlock.periodSec * 1000; if (d > 0) eta = " · in about " + human(d); } catch (e) {}
+            h.textContent = "Still sealed."; p.className = "x-hint"; p.textContent = val ? "Opens at drand round #" + val + eta : "It isn't time yet.";
+            openOut.append(mini, h, p);
+          } else if (kind === "empty") {
+            h.textContent = "Paste a capsule first.";
+            p.className = "x-hint"; p.textContent = "Seal one above, press Copy capsule, then paste it here.";
+            openOut.append(h, p);
+          } else {
+            h.textContent = "That doesn't look like a LATER capsule.";
+            openOut.append(h);
+          }
+          if (kind === "open" || openOut.getBoundingClientRect().bottom > innerHeight) openOut.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "center" });
+        }
+        function openIt(left) {
+          var text = openIn.value.trim();
+          if (!text) { showOpen("empty"); openIn.focus(); return; }
+          openBtn.disabled = true; openBtn.textContent = "Opening…";
+          new Promise(function (res, rej) {
+            if (!window.LaterTlock) return rej(new Error("unavailable"));
+            res(LaterTlock.unseal(text));
+          }).then(function (m) { showOpen("open", m); }, function (e) {
+            var s = String((e && e.message) || e);
+            if (/too early/i.test(s)) {
+              if (left > 0) { setTimeout(function () { openIt(left - 1); }, 2000); return; }
+              var n = (s.match(/round\D*(\d+)/i) || [])[1];
+              showOpen("locked", n ? +n : 0);
+            } else showOpen("bad");
+          });
+        }
+        openBtn.addEventListener("click", function () { openIt(0); });
+        function autoOpen() {
+          openIn.value = capCt;
+          $("open").scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+          setTimeout(function () { openIt(8); }, reduce ? 0 : 700);
         }
 
         function flap(el, s, all) {
@@ -436,7 +572,8 @@
           });
         }
         function tick(all) {
-          var t = Math.max(0, unlock - Date.now()) / 1000;
+          var t = Math.max(0, capMs - Date.now()) / 1000;
+          if (t <= 0 && capCt && !capAuto) { capAuto = true; autoOpen(); }
           if (all === true) ["cd-d", "cd-h", "cd-m", "cd-s"].forEach(function (id) { $(id).dataset.v = ""; });
           flap($("cd-d"), String(Math.floor(t / 86400)), all === true);
           flap($("cd-h"), pad(Math.floor(t % 86400 / 3600)), all === true);
@@ -635,10 +772,14 @@
           var b = e.target.closest(".x-cta, .x-seal, .x-opt, .btn");
           if (!b || reduce) return;
           var r = b.getBoundingClientRect(), x = e.clientX || r.left + r.width / 2, y = e.clientY || r.top + r.height / 2;
-          var big = b.matches(".x-cta, .x-seal"), cols = ["#f5c56b", "#ffe3a3", "#a58bff", "#ffb38a", "#ffffff"];
-          for (var i = 0; i < (big ? 34 : 16); i++) { var a = Math.random() * 6.28, s = 1.5 + Math.random() * (big ? 5 : 3); parts.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 1.5, r: 1.5 + Math.random() * 2.5, l: 1, c: cols[i % cols.length] }); }
-          if (!running) { running = true; requestAnimationFrame(fxLoop); }
+          var big = b.matches(".x-cta, .x-seal");
+          burst(x, y, big ? 34 : 16, big);
         });
+        function burst(x, y, n, big) {
+          var cols = ["#f5c56b", "#ffe3a3", "#a58bff", "#ffb38a", "#ffffff"];
+          for (var i = 0; i < n; i++) { var a = Math.random() * 6.28, s = 1.5 + Math.random() * (big ? 5 : 3); parts.push({ x: x, y: y, vx: Math.cos(a) * s, vy: Math.sin(a) * s - 1.5, r: 1.5 + Math.random() * 2.5, l: 1, c: cols[i % cols.length] }); }
+          if (!running) { running = true; requestAnimationFrame(fxLoop); }
+        }
       })();
     </script>
   </body>
